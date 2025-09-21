@@ -49,7 +49,7 @@ export class App implements OnInit {
 
   ngOnInit(): void {
     const pane = new Pane() as any;
-    pane.addBinding(this, 'gridSize', { min: 50, max: 200, step: 1 });
+    pane.addBinding(this, 'gridSize', { min: 50, max: 200, step: 1, label: 'Image size' });
   }
 
   public onCellClick(item: any, pic: any): void {
