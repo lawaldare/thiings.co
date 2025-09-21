@@ -1,33 +1,26 @@
-import { Component, CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA, signal } from '@angular/core';
+import { Component, CUSTOM_ELEMENTS_SCHEMA, inject, NO_ERRORS_SCHEMA, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { ThiingsGridComponent } from './thiingsGrid';
+import { NzSliderModule } from 'ng-zorro-antd/slider';
+import { FormsModule } from '@angular/forms';
+
+import { NzModalModule } from 'ng-zorro-antd/modal';
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { Gallery } from './gallery';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, ThiingsGridComponent],
+  imports: [ThiingsGridComponent, FormsModule, NzSliderModule, NzModalModule],
   templateUrl: './app.html',
   styleUrl: './app.scss',
 })
 export class App {
   protected readonly title = signal('thiings.co');
+  private readonly modal = inject(NzModalService);
 
-  colors = [
-    'red',
-    'green',
-    'blue',
-    'yellow',
-    'pink',
-    'cyan',
-    'orange',
-    'purple',
-    'teal',
-    'lime',
-    'indigo',
-    'amber',
-    'brown',
-  ];
+  public gridSize = signal(100);
 
-  olamides = [
+  public olamides = [
     '1.jpeg',
     '2.jpeg',
     '3.jpeg',
@@ -54,7 +47,20 @@ export class App {
     '24.jpeg',
   ];
 
-  onCellClick(item: any) {
-    // alert(`Cell ${item.gridIndex} clicked!`);
+  public onCellClick(item: any, pic: any): void {
+    // console.log(item, pic);
+
+    this.modal.create({
+      nzTitle: `Infinite Scroll Gallery`,
+      nzContent: Gallery,
+      nzClosable: false,
+      nzCentered: true,
+      nzOkText: null,
+      nzData: pic,
+    });
+  }
+
+  onChange(value: number): void {
+    console.log(`onChange: ${value}`);
   }
 }
