@@ -9,6 +9,9 @@ import {
   ChangeDetectionStrategy,
   AfterViewInit,
   NgModule,
+  HostListener,
+  SimpleChanges,
+  OnChanges,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
@@ -159,13 +162,19 @@ function getDistance(a: Position, b: Position) {
     `,
   ],
 })
-export class ThiingsGridComponent implements OnInit, AfterViewInit, OnDestroy {
+export class ThiingsGridComponent implements OnInit, AfterViewInit, OnDestroy, OnChanges {
   @Input() gridSize = 80;
   /** Pass an ng-template that receives ItemConfig as implicit context: let-item */
   @Input() itemTemplate?: TemplateRef<{ $implicit: ItemConfig }>;
   @Input() initialPosition: Position = { x: 0, y: 0 };
 
   @ViewChild('container', { static: true }) containerRef!: ElementRef<HTMLElement>;
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['gridSize'] && !changes['gridSize'].firstChange) {
+      this.updateGridItems(); // recalc when gridSize changes
+    }
+  }
 
   offset: Position = { x: 0, y: 0 };
   restPos: Position = { x: 0, y: 0 };
