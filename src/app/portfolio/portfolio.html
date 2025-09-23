@@ -1,0 +1,8 @@
+<div class="grid-wrapper">
+  <app-thiings-grid [gridSize]="gridSize" [itemTemplate]="cellTemplate"> </app-thiings-grid>
+</div>
+
+<ng-template #cellTemplate let-item>
+  @let page = components[item.gridIndex % components.length];
+  <ng-container *ngComponentOutlet="page"></ng-container>
+</ng-template>
